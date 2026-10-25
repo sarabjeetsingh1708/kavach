@@ -27,6 +27,8 @@ EVON_URL = os.getenv("EVON_URL", "")
 EVON_MODEL = os.getenv("EVON_MODEL", "evon")
 EVON_API_KEY = os.getenv("EVON_API_KEY", "")
 TELEGRAM_BOT_TOKEN = os.getenv("TELEGRAM_BOT_TOKEN", "")
+# Only one process may poll a bot token; set KAVACH_NO_BOT=1 on a second (test) server so it doesn't fight the first
+RUN_BOT = os.getenv("KAVACH_NO_BOT", "") != "1"
 GUARDIAN_CHAT_ID = os.getenv("GUARDIAN_CHAT_ID", "")
 LANGUAGE = os.getenv("LANGUAGE", "hi-IN")
 ALERT_THRESHOLD = int(os.getenv("ALERT_THRESHOLD", "70"))

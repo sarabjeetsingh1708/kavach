@@ -37,7 +37,7 @@ RULES = [
      "lottery", "Asks a fee to release a prize/refund"),
     # pressure: secrecy and urgency
     (r"kisi (ko|se) (bhi )?mat|kisi ko na bata|(mummy|papa|ghar mein kisi|family) ko (bhi )?(mat|nahi)"
-     r"|don'?t tell|yaarukkum sollaadh|confidential"
+     r"|don'?t tell|do not tell|yaarukkum sollaadh|confidential"
      r"|किसी (को|से) (भी )?(मत|ना|न )|(मम्मी|पापा|घर में किसी|फैमिली|परिवार) को (भी )?(मत|नहीं)|कॉन्फिडेंशियल|गुप्त"
      r"|யாருக்கும் சொல்ல|কাউকে বলবেন না",
      25, PRESSURE, None, "Tells you to keep it secret"),

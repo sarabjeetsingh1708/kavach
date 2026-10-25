@@ -19,7 +19,7 @@ WEB = Path(__file__).resolve().parent.parent / "web"
 async def lifespan(_app):
     await gnani_tts.warm_cache()
     bot = None
-    if config.TELEGRAM_BOT_TOKEN:  # run the Mode B bot in the same process: one command starts everything
+    if config.TELEGRAM_BOT_TOKEN and config.RUN_BOT:  # run the Mode B bot in the same process: one command starts everything
         from .telegram_bot import build
         bot = build()
         await bot.initialize()
@@ -44,7 +44,7 @@ async def health():
 
 @app.get("/warning/{scam_type}")
 async def warning(scam_type: str, lang: str = "hi-IN"):
-    lang = lang if lang in gnani_tts.WARNINGS else "hi-IN"
+    lang = lang if lang in gnani_tts.SUPPORTED else "hi-IN"
     audio = await gnani_tts.synthesize(gnani_tts.warning_text(scam_type, lang), lang)
     if audio is None:
         return Response(status_code=204)  # web page falls back to browser speech
@@ -112,7 +112,7 @@ async def ws_listen(ws: WebSocket):
     """Mode A. Binary frames = self-contained audio chunks; text frames {"text": "..."} = transcript lines
     (typed demo without Prisma). Each frame gets the full call state back. Nothing is stored."""
     await ws.accept()
-    session = CallSession()
+    session = CallSession(language=ws.query_params.get("lang"))  # the language picked in the app
     while True:
         msg = await ws.receive()
         if msg["type"] == "websocket.disconnect":

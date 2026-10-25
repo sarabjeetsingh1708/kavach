@@ -48,7 +48,8 @@ telephony number such as Exotel or Twilio. That's left as future work.
   | Bank: "suspicious transaction… we will never ask for your OTP, report to 1930" | 100 ❌ | 10 | 🟠 caution |
   | Scam: police + arrest threat + "keep your camera on" (no money ask yet) | 61 | 95 | 🔴 alarm |
 
-- **Warnings in the caller's language:** Hindi, Tamil and Bengali. The language is detected from the script Prisma writes the transcript in, so there's nothing to set up. Each warning was checked by round trip: Timbre speaks it, Prisma transcribes it back, and the text matched almost word for word. The Tamil and Bengali wording still needs a native speaker's review.
+- **Four languages: हिंदी, தமிழ், বাংলা, English.** On first launch the app asks for the language, and the phone remembers it; the 🌐 chip changes it later. The choice sets the screen text, the language Prisma listens for, and the spoken warning. The red-flag reasons stay in English, because they come from the rule list and from Evon. Without a choice (Telegram, recording checks), the warning language is detected from the script Prisma writes the transcript in.
+- **Checking the warnings:** Hindi, Tamil, Bengali and English warnings are all spoken by Timbre. Each warning was checked by round trip: Timbre speaks it, Prisma transcribes it back, and the text matched almost word for word. The Tamil and Bengali wording still needs a native speaker's review.
 - **Spoken advice is pre-written, not Evon's:** in testing, Evon's own Hindi advice once told a scam victim *not to contact any government agency*. Kavach shows Evon's reasons, but always speaks its own tested warning lines.
 - **Warnings** (`app/gnani_tts.py`): pre-written, calm lines per scam type, generated once with Timbre and cached on disk. If Timbre isn't configured, the web page falls back to the browser's Hindi speech voice.
 - **Privacy**: audio is processed only while "Suno" is on. Nothing is stored except the cached warning clips.

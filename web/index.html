@@ -13,38 +13,42 @@
 <meta name="apple-mobile-web-app-title" content="कवच">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700;800&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700;800&family=Noto+Sans+Tamil:wght@400;600;800&family=Noto+Sans+Bengali:wght@400;600;800&display=swap" rel="stylesheet">
 <style>
   :root {
     --bg: #FBF7F0; --card: #FFFFFF; --ink: #1F2A24; --muted: #6B7069; --line: #ECE4D6;
     --safe: #1E7A4F; --safe-soft: #E4F2EA; --warn: #B86A00; --warn-soft: #FFF1DC;
-    --danger: #C62828; --danger-deep: #8E1414; --danger-soft: #FDE8E8; --accent: #E8833A; --mic: #2F5D50;
+    --danger: #C62828; --danger-deep: #8E1414; --danger-soft: #FDE8E8; --mic: #2F5D50;
     --shadow: 0 1px 2px rgba(31,42,36,.06), 0 8px 24px rgba(31,42,36,.08);
   }
   @media (prefers-color-scheme: dark) {
     :root { --bg: #121714; --card: #1B221E; --ink: #EEF2EE; --muted: #A2ABA4; --line: #2A332E;
-            --safe-soft: #17301F; --warn-soft: #33260F; --danger-soft: #3A1616; --danger: #E5484D; --mic: #3E7A69; --shadow: 0 8px 24px rgba(0,0,0,.35); }
+            --safe-soft: #17301F; --warn-soft: #33260F; --danger-soft: #3A1616; --danger: #E5484D; --mic: #3E7A69;
+            --shadow: 0 8px 24px rgba(0,0,0,.35); }
   }
   * { box-sizing: border-box; margin: 0; }
   html { -webkit-text-size-adjust: 100%; }
-  body { font-family: "Mukta", system-ui, "Noto Sans Devanagari", sans-serif; background: var(--bg); color: var(--ink);
-         line-height: 1.45; min-height: 100vh; }
+  body { font-family: "Mukta", "Noto Sans Tamil", "Noto Sans Bengali", system-ui, sans-serif; background: var(--bg);
+         color: var(--ink); line-height: 1.45; min-height: 100vh; }
   main { max-width: 520px; margin: 0 auto; padding: 16px 16px 40px; }
-  .en { color: var(--muted); font-size: .82em; font-weight: 500; }
 
   /* header */
-  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  /* long Tamil/Bengali chip labels wrap the chips onto their own row instead of squeezing the brand */
+  header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
   .brand { display: flex; align-items: center; gap: 10px; }
   .brand svg { width: 40px; height: 40px; flex: none; }
-  .brand b { display: block; font-size: 26px; font-weight: 800; line-height: 1; }
-  .brand span { font-size: 13px; color: var(--muted); }
-  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
-          background: var(--card); border: 1px solid var(--line); font-size: 13px; font-weight: 500; white-space: nowrap; }
+  .brand b { display: block; font-size: 26px; font-weight: 800; line-height: 1.1; }
+  .brand span { font-size: 13px; color: var(--muted); white-space: nowrap; }
+  .tools { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin-left: auto; }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 5px 11px; border-radius: 999px;
+          background: var(--card); border: 1px solid var(--line); font: inherit; font-size: 13px; font-weight: 500;
+          color: var(--ink); white-space: nowrap; }
   .chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
   .chip.on i { background: var(--safe); box-shadow: 0 0 0 3px var(--safe-soft); }
+  button.chip { cursor: pointer; }
 
   /* listen button */
-  .hero { display: grid; place-items: center; padding: 28px 0 18px; }
+  .hero { display: grid; place-items: center; padding: 26px 0 18px; }
   .ring-wrap { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
   .ring { position: absolute; inset: 0; border-radius: 50%; background: var(--mic); opacity: 0; transform: scale(1);
           transition: transform .12s ease-out, opacity .3s; }
@@ -52,14 +56,12 @@
   .listening .ring.r2 { opacity: .08; }
   #listen { position: relative; width: 180px; height: 180px; border-radius: 50%; border: 0; cursor: pointer;
             background: var(--mic); color: #fff; font: inherit; display: grid; place-items: center; align-content: center;
-            gap: 2px; box-shadow: 0 10px 30px rgba(47,93,80,.35); transition: transform .15s, background .3s; }
+            gap: 4px; box-shadow: 0 10px 30px rgba(47,93,80,.35); transition: transform .15s, background .3s; padding: 12px; }
   #listen:active { transform: scale(.97); }
   #listen svg { width: 46px; height: 46px; }
-  #listen .big { font-size: 34px; font-weight: 800; line-height: 1.1; }
-  #listen .small { font-size: 13px; opacity: .85; }
+  #listen .big { font-size: 32px; font-weight: 800; line-height: 1.1; }
   .listening #listen { background: #24493F; }
   .hint { text-align: center; margin-top: 14px; font-size: 17px; }
-  .hint .en { display: block; }
 
   /* status */
   .status { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 18px; background: var(--card);
@@ -67,7 +69,7 @@
   .status .icon { width: 48px; height: 48px; border-radius: 14px; flex: none; display: grid; place-items: center;
                   background: var(--safe-soft); color: var(--safe); }
   .status .icon svg { width: 28px; height: 28px; }
-  .status h2 { font-size: 22px; font-weight: 800; line-height: 1.2; }
+  .status h2 { font-size: 22px; font-weight: 800; line-height: 1.25; }
   .status p { font-size: 17px; margin-top: 2px; }
   .meter { height: 8px; border-radius: 4px; background: var(--line); margin-top: 10px; overflow: hidden; }
   .meter div { height: 100%; width: 0; background: var(--safe); border-radius: 4px; transition: width .5s, background .3s; }
@@ -98,14 +100,13 @@
   details[open].card summary::after { content: "–"; }
   .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
   .demos button { text-align: left; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg);
-                  color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1.25; }
-  .demos button small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; margin-top: 2px; }
+                  color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1.3; }
   .demos button:disabled { opacity: .5; cursor: wait; }
 
   /* helpline + footer */
-  .helpline { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 14px;
-              border-radius: 18px; background: var(--card); border: 2px solid var(--line); color: var(--ink);
-              text-decoration: none; font-size: 18px; font-weight: 700; }
+  .helpline { display: flex; align-items: center; justify-content: center; gap: 6px; flex-wrap: wrap; margin-top: 14px;
+              padding: 14px; border-radius: 18px; background: var(--card); border: 2px solid var(--line); color: var(--ink);
+              text-decoration: none; font-size: 18px; font-weight: 700; text-align: center; }
   .helpline b { color: var(--danger); font-size: 22px; }
   footer { margin-top: 18px; font-size: 13px; color: var(--muted); text-align: center; }
   #err { margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: var(--warn-soft); font-size: 14px; display: none; }
@@ -119,9 +120,9 @@
   @media (prefers-reduced-motion: reduce) { #alarm { animation: none; } .ring { transition: none; } }
   #alarm .inner { max-width: 520px; margin: 0 auto; width: 100%; }
   #alarm svg { width: 64px; height: 64px; }
-  #alarm h1 { font-size: 48px; font-weight: 800; line-height: 1.05; margin-top: 8px; }
+  #alarm h1 { font-size: 44px; font-weight: 800; line-height: 1.15; margin-top: 8px; }
   #alarm .type { font-size: 20px; font-weight: 700; opacity: .9; margin-top: 4px; }
-  #alarm .say { font-size: 26px; font-weight: 700; line-height: 1.3; margin: 18px 0; }
+  #alarm .say { font-size: 25px; font-weight: 700; line-height: 1.35; margin: 18px 0; }
   #alarm ul { padding-left: 20px; font-size: 15px; opacity: .9; }
   #alarm .actions { display: grid; gap: 10px; margin-top: 22px; }
   #alarm a, #alarm button { display: block; text-align: center; padding: 16px; border-radius: 16px; font: inherit;
@@ -130,6 +131,19 @@
   #alarm button { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.7); }
   #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 20; background: var(--ink);
            color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; display: none; max-width: 90vw; }
+
+  /* language picker */
+  #langPick { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: none; overflow-y: auto; }
+  #langPick.show { display: block; }
+  #langPick .inner { max-width: 440px; margin: 0 auto; padding: 40px 16px; }
+  #langPick svg { width: 56px; height: 56px; }
+  #langPick h1 { font-size: 24px; font-weight: 800; margin: 14px 0 4px; line-height: 1.3; }
+  #langPick p { color: var(--muted); margin-bottom: 22px; }
+  #langPick button { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 20px;
+                     margin-top: 12px; border-radius: 18px; border: 2px solid var(--line); background: var(--card);
+                     color: var(--ink); font: inherit; font-size: 24px; font-weight: 800; cursor: pointer; text-align: left; }
+  #langPick button small { font-size: 14px; font-weight: 500; color: var(--muted); }
+  #langPick button.current { border-color: var(--mic); }
 </style>
 </head>
 <body>
@@ -137,106 +151,239 @@
   <header>
     <div class="brand">
       <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 6 8.5v10.2C6 27.6 12 34.6 20 37c8-2.4 14-9.4 14-18.3V8.5L20 3Z" fill="#2F5D50"/><path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      <div><b>कवच</b><span>Kavach · scam-call shield</span></div>
+      <div><b data-t="brand"></b><span>Kavach · scam-call shield</span></div>
     </div>
-    <div class="chip" id="family"><i></i><span>परिवार अलर्ट…</span></div>
+    <div class="tools">
+      <button class="chip" id="langBtn" aria-label="Change language">🌐 <span id="langName"></span></button>
+      <div class="chip" id="family"><i></i><span id="familyText"></span></div>
+    </div>
   </header>
 
   <section class="hero" id="hero">
     <div class="ring-wrap">
       <div class="ring r2" id="ring2"></div>
       <div class="ring" id="ring1"></div>
-      <button id="listen" aria-label="सुनो — start listening">
+      <button id="listen">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
-        <span class="big" id="btnBig">सुनो</span>
-        <span class="small" id="btnSmall">Listen</span>
+        <span class="big" id="btnBig"></span>
       </button>
     </div>
-    <p class="hint" id="hint">कॉल को स्पीकर पर डालिए और "सुनो" दबाइए<span class="en">Put the call on speaker, then tap Listen</span></p>
+    <p class="hint" id="hint"></p>
   </section>
 
   <section class="status" id="status" aria-live="polite">
     <div class="icon" id="statusIcon"></div>
     <div style="flex:1">
-      <h2 id="statusTitle">तैयार हूँ</h2>
-      <p id="statusMsg">कोई कॉल नहीं सुन रहा</p>
+      <h2 id="statusTitle"></h2>
+      <p id="statusMsg"></p>
       <div class="meter"><div id="bar"></div></div>
     </div>
   </section>
   <div id="err"></div>
 
   <section class="card">
-    <h3>क्या बोला जा रहा है <span class="en">· live captions</span></h3>
-    <div id="captions"><span class="empty">यहाँ कॉल की बातें दिखेंगी</span></div>
+    <h3 data-t="captionsTitle"></h3>
+    <div id="captions"></div>
   </section>
 
   <section class="card">
-    <h3>खतरे के संकेत <span class="en">· red flags</span></h3>
-    <div id="flags"><span class="empty">अभी तक कोई नहीं</span></div>
+    <h3 data-t="flagsTitle"></h3>
+    <div id="flags"></div>
   </section>
 
   <details class="card" id="demoBox">
-    <summary><span>डेमो कॉल सुनिए <span class="en">· try a demo call</span></span></summary>
+    <summary><span data-t="demoTitle"></span></summary>
     <div class="demos" id="demos"></div>
   </details>
 
-  <a class="helpline" href="tel:1930">📞 धोखा हुआ? <b>1930</b> पर शिकायत करें</a>
-  <footer>Kavach is an aid, not a guarantee. Audio is processed only while listening and is never stored.<br>
-    Built on Gnani AI · Prisma · Evon · Timbre</footer>
+  <a class="helpline" href="tel:1930" id="helpline"></a>
+  <footer><span data-t="footer"></span><br>Built on Gnani AI · Prisma · Evon · Timbre</footer>
 </main>
 
 <div id="alarm" role="alertdialog" aria-labelledby="alarmTitle">
   <div class="inner">
     <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
-    <h1 id="alarmTitle">धोखा!<br>कॉल काट दीजिए</h1>
+    <h1 id="alarmTitle"></h1>
     <div class="type" id="alarmType"></div>
     <p class="say" id="alarmSay"></p>
     <ul id="alarmWhy"></ul>
     <div class="actions">
-      <a href="tel:1930">📞 1930 पर शिकायत करें</a>
-      <button id="alarmOk">ठीक है, समझ गया</button>
+      <a href="tel:1930" data-t="alarmCall"></a>
+      <button id="alarmOk" data-t="alarmOk"></button>
     </div>
+  </div>
+</div>
+
+<div id="langPick" role="dialog" aria-labelledby="langPickTitle">
+  <div class="inner">
+    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 6 8.5v10.2C6 27.6 12 34.6 20 37c8-2.4 14-9.4 14-18.3V8.5L20 3Z" fill="#2F5D50"/><path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <h1 id="langPickTitle">भाषा चुनें · மொழி · ভাষা · Language</h1>
+    <p>Kavach will listen, speak and show everything in this language.</p>
+    <div id="langList"></div>
   </div>
 </div>
 <div id="toast"></div>
 
 <script>
 const $ = id => document.getElementById(id);
+
+// ---------- languages: screen text, scam labels and demo calls
+// Tamil and Bengali text was written for this project; have a native speaker review it before showing it publicly.
+const LANGS = {
+  "hi-IN": { name: "हिंदी", en: "Hindi", html: "hi", t: {
+    brand: "कवच", listen: "सुनो", stop: "रोकें",
+    hintIdle: 'कॉल को स्पीकर पर डालिए और "सुनो" दबाइए', hintListening: "सुन रहा हूँ… फ़ोन को पास रखिए",
+    ready: "तैयार हूँ", idle: "कोई कॉल नहीं सुन रहा",
+    safeTitle: "अभी तक सब ठीक है", safeListening: "सुन रहा हूँ… कोई खतरा दिखा तो तुरंत बताऊँगा",
+    safeDone: "इस कॉल में कोई खतरा नहीं मिला", cautionTitle: "सावधान रहिए", dangerTitle: "धोखा! कॉल काट दीजिए",
+    alarmTitle: "धोखा!<br>कॉल काट दीजिए", alarmCall: "📞 1930 पर शिकायत करें", alarmOk: "ठीक है, समझ गया",
+    captionsTitle: "क्या बोला जा रहा है", captionsEmpty: "यहाँ कॉल की बातें दिखेंगी",
+    flagsTitle: "खतरे के संकेत", flagsEmpty: "अभी तक कोई नहीं", demoTitle: "डेमो कॉल सुनिए",
+    helpline: "📞 धोखा हुआ? <b>1930</b> पर शिकायत करें",
+    familyOn: "परिवार अलर्ट चालू", familyOff: "परिवार अलर्ट बंद", familyAlerted: "👨‍👩‍👧 परिवार को अलर्ट भेज दिया गया",
+    micError: "माइक या सर्वर नहीं मिला", serverError: "सर्वर नहीं मिला",
+    footer: "कवच एक मदद है, गारंटी नहीं। आवाज़ सिर्फ़ सुनते समय इस्तेमाल होती है और कहीं सेव नहीं होती।" },
+    labels: { digital_arrest: "डिजिटल अरेस्ट फ्रॉड", kyc_bank: "KYC / बैंक फ्रॉड", courier: "कूरियर / कस्टम्स फ्रॉड",
+      fake_relative: "नकली रिश्तेदार फ्रॉड", lottery: "लॉटरी / इनाम फ्रॉड", none: "संदिग्ध कॉल" },
+    demos: [
+      { icon: "👮", name: "नकली CBI अफ़सर", lines: ["Hello, main CBI headquarters Delhi se Inspector Sharma bol raha hoon.",
+        "Aapke naam pe ek money laundering case darj hua hai.", "Aapke against arrest warrant nikla hai. Abhi video call pe aaiye.",
+        "Yeh baat kisi ko mat batana, family ko bhi nahi.", "Verification ke liye apne paise safe account mein transfer kar dijiye."] },
+      { icon: "🏦", name: "KYC / OTP कॉल", lines: ["Namaste, main SBI bank se bol raha hoon.",
+        "Aapka KYC expire ho gaya hai, aaj raat account band ho jayega.", "Abhi aapke phone pe ek OTP aayega, woh mujhe bata dijiye turant."] },
+      { icon: "📦", name: "पार्सल में ड्रग्स", lines: ["Hello, FedEx courier se bol rahe hain.",
+        "Aapke naam ka ek parcel Mumbai customs ne pakda hai.", "Usme drugs aur fake passport mile hain.",
+        "Case band karne ke liye abhi ke abhi fine bhejna hoga."] },
+      { icon: "🚑", name: "नकली रिश्तेदार", lines: ["Papa, main bol raha hoon, pehchana?",
+        "Yeh mera naya number hai, purana phone toot gaya.", "Mera accident ho gaya hai, main hospital mein hoon.",
+        "Jaldi se is UPI pe pachaas hazaar paise bhej do, mummy ko mat batana."] },
+      { icon: "🎁", name: "लॉटरी का इनाम", lines: ["Badhai ho! Aapne KBC lucky draw mein pachees lakh jeete hain.",
+        "Prize lene ke liye bas processing fee bharni hogi.", "Paanch hazaar rupaye GST jama kar dijiye, aaj hi."] },
+      { icon: "🩺", name: "डॉक्टर का रिमाइंडर", lines: ["Namaste aunty, main Dr. Mehta ke clinic se bol rahi hoon.",
+        "Kal subah gyarah baje aapka checkup hai.", "Apni purani reports saath le aaiyega.",
+        "Koi dikkat ho toh clinic pe call kar lijiye. Dhanyavaad."] },
+    ] },
+
+  "ta-IN": { name: "தமிழ்", en: "Tamil", html: "ta", t: {
+    brand: "கவசம்", listen: "கேள்", stop: "நிறுத்து",
+    hintIdle: 'அழைப்பை ஸ்பீக்கரில் போட்டு "கேள்" அழுத்துங்கள்', hintListening: "கேட்டுக்கொண்டிருக்கிறேன்… போனை அருகில் வையுங்கள்",
+    ready: "தயார்", idle: "எந்த அழைப்பையும் கேட்கவில்லை",
+    safeTitle: "இதுவரை எல்லாம் சரி", safeListening: "கேட்கிறேன்… ஆபத்து தெரிந்தால் உடனே சொல்வேன்",
+    safeDone: "இந்த அழைப்பில் ஆபத்து எதுவும் இல்லை", cautionTitle: "கவனமாக இருங்கள்", dangerTitle: "மோசடி! அழைப்பைத் துண்டியுங்கள்",
+    alarmTitle: "மோசடி!<br>அழைப்பைத் துண்டியுங்கள்", alarmCall: "📞 1930-ல் புகார் செய்யுங்கள்", alarmOk: "சரி, புரிந்தது",
+    captionsTitle: "என்ன பேசப்படுகிறது", captionsEmpty: "அழைப்பின் பேச்சு இங்கே தெரியும்",
+    flagsTitle: "ஆபத்து அறிகுறிகள்", flagsEmpty: "இதுவரை எதுவும் இல்லை", demoTitle: "டெமோ அழைப்பைக் கேளுங்கள்",
+    helpline: "📞 மோசடி நடந்ததா? <b>1930</b>-ல் புகார் செய்யுங்கள்",
+    familyOn: "குடும்ப எச்சரிக்கை இயக்கத்தில்", familyOff: "குடும்ப எச்சரிக்கை அணைப்பில்",
+    familyAlerted: "👨‍👩‍👧 குடும்பத்துக்கு எச்சரிக்கை அனுப்பப்பட்டது",
+    micError: "மைக் அல்லது சர்வர் கிடைக்கவில்லை", serverError: "சர்வர் கிடைக்கவில்லை",
+    footer: "கவசம் ஒரு உதவி மட்டுமே, உத்தரவாதம் அல்ல. கேட்கும்போது மட்டுமே ஒலி பயன்படுத்தப்படுகிறது, எங்கும் சேமிக்கப்படுவதில்லை." },
+    labels: { digital_arrest: "டிஜிட்டல் அரெஸ்ட் மோசடி", kyc_bank: "KYC / வங்கி மோசடி", courier: "கூரியர் / சுங்க மோசடி",
+      fake_relative: "போலி உறவினர் மோசடி", lottery: "லாட்டரி / பரிசு மோசடி", none: "சந்தேகமான அழைப்பு" },
+    demos: [
+      { icon: "👮", name: "போலி CBI அதிகாரி", lines: ["நான் சிபிஐ ஆஃபிசர் பேசுறேன்.", "உங்கள் மேல கேஸ் இருக்கு.",
+        "உங்களுக்கு அரெஸ்ட் வாரண்ட் வந்திருக்கு.", "யாருக்கும் சொல்லாதீங்க, உடனே பணம் ட்ரான்ஸ்பர் பண்ணுங்க."] },
+      { icon: "🏦", name: "KYC / OTP அழைப்பு", lines: ["நான் பேங்க்ல இருந்து பேசுறேன்.", "உங்க கே ஒய் சி அப்டேட் ஆகல.",
+        "உங்க அக்கவுண்ட் ப்ளாக் ஆயிடும்.", "உங்க போன்ல வந்த ஓ டி பி சொல்லுங்க."] },
+      { icon: "🩺", name: "சாதாரண அழைப்பு", lines: ["அம்மா, நான் சாப்பிட்டேன்.", "நாளைக்கு ஊருக்கு வரேன்.",
+        "நீங்க மருந்து சாப்பிட்டீங்களா?"] },
+    ] },
+
+  "bn-IN": { name: "বাংলা", en: "Bengali", html: "bn", t: {
+    brand: "কবচ", listen: "শোনো", stop: "থামাও",
+    hintIdle: 'কলটি স্পিকারে দিন এবং "শোনো" চাপুন', hintListening: "শুনছি… ফোনটা কাছে রাখুন",
+    ready: "প্রস্তুত", idle: "কোনো কল শুনছি না",
+    safeTitle: "এখন পর্যন্ত সব ঠিক আছে", safeListening: "শুনছি… বিপদ দেখলেই সঙ্গে সঙ্গে জানাব",
+    safeDone: "এই কলে কোনো বিপদ পাওয়া যায়নি", cautionTitle: "সাবধান থাকুন", dangerTitle: "প্রতারণা! কলটি কেটে দিন",
+    alarmTitle: "প্রতারণা!<br>কলটি কেটে দিন", alarmCall: "📞 1930-এ অভিযোগ করুন", alarmOk: "ঠিক আছে, বুঝেছি",
+    captionsTitle: "কী বলা হচ্ছে", captionsEmpty: "কলের কথা এখানে দেখা যাবে",
+    flagsTitle: "বিপদের লক্ষণ", flagsEmpty: "এখনও কিছু নেই", demoTitle: "ডেমো কল শুনুন",
+    helpline: "📞 প্রতারিত হয়েছেন? <b>1930</b>-এ অভিযোগ করুন",
+    familyOn: "পরিবার সতর্কতা চালু", familyOff: "পরিবার সতর্কতা বন্ধ", familyAlerted: "👨‍👩‍👧 পরিবারকে সতর্ক করা হয়েছে",
+    micError: "মাইক বা সার্ভার পাওয়া যায়নি", serverError: "সার্ভার পাওয়া যায়নি",
+    footer: "কবচ একটি সহায়তা, গ্যারান্টি নয়। শুধু শোনার সময় অডিও ব্যবহার হয়, কোথাও সংরক্ষণ করা হয় না।" },
+    labels: { digital_arrest: "ডিজিটাল অ্যারেস্ট প্রতারণা", kyc_bank: "KYC / ব্যাংক প্রতারণা", courier: "কুরিয়ার / কাস্টমস প্রতারণা",
+      fake_relative: "ভুয়া আত্মীয় প্রতারণা", lottery: "লটারি / পুরস্কার প্রতারণা", none: "সন্দেহজনক কল" },
+    demos: [
+      { icon: "👮", name: "ভুয়া CBI অফিসার", lines: ["আমি সি বি আই অফিসার বলছি।", "আপনার নামে মামলা হয়েছে।",
+        "আপনাকে গ্রেফতার করা হবে।", "কাউকে বলবেন না, এখনই টাকা পাঠান।"] },
+      { icon: "🏦", name: "KYC / OTP কল", lines: ["আমি ব্যাঙ্ক থেকে বলছি।", "আপনার কে ওয়াই সি আপডেট হয়নি।",
+        "আপনার অ্যাকাউন্ট বন্ধ হয়ে যাবে।", "আপনার ফোনে ও টি পি এসেছে, ওটা বলুন।"] },
+      { icon: "🩺", name: "সাধারণ কল", lines: ["মা, আমি পৌঁছে গেছি।", "কাল ফোন করব।", "তুমি ওষুধ খেয়েছ?"] },
+    ] },
+
+  "en-IN": { name: "English", en: "English", html: "en", t: {
+    brand: "Kavach", listen: "Listen", stop: "Stop",
+    hintIdle: "Put the call on speaker, then tap Listen", hintListening: "Listening… keep the phone close",
+    ready: "Ready", idle: "Not listening to a call",
+    safeTitle: "All fine so far", safeListening: "Listening… I'll warn you the moment something looks wrong",
+    safeDone: "No danger found in this call", cautionTitle: "Be careful", dangerTitle: "Scam! Hang up now",
+    alarmTitle: "Scam!<br>Hang up now", alarmCall: "📞 Report on 1930", alarmOk: "OK, understood",
+    captionsTitle: "What's being said", captionsEmpty: "The call's words will appear here",
+    flagsTitle: "Red flags", flagsEmpty: "None so far", demoTitle: "Try a demo call",
+    helpline: "📞 Been scammed? Report on <b>1930</b>",
+    familyOn: "Family alerts on", familyOff: "Family alerts off", familyAlerted: "👨‍👩‍👧 Your family has been alerted",
+    micError: "Microphone or server not available", serverError: "Server not reachable",
+    footer: "Kavach is an aid, not a guarantee. Audio is used only while listening and is never stored." },
+    labels: { digital_arrest: "Digital arrest scam", kyc_bank: "KYC / bank scam", courier: "Courier / customs scam",
+      fake_relative: "Fake relative scam", lottery: "Lottery / prize scam", none: "Suspicious call" },
+    demos: [
+      { icon: "👮", name: "Fake CBI officer", lines: ["Hello, this is Inspector Sharma from the CBI.",
+        "A money laundering case has been registered against your Aadhaar.",
+        "There is an arrest warrant in your name, stay on this video call.", "Do not tell your family about this.",
+        "Transfer your savings to a safe account for verification."] },
+      { icon: "🏦", name: "KYC / OTP call", lines: ["Hello, I am calling from your bank's KYC team.",
+        "Your account will be blocked tonight.", "Please tell me the OTP you just received."] },
+      { icon: "🩺", name: "Doctor's reminder", lines: ["Hi, this is Dr. Mehta's clinic.",
+        "Your check-up is tomorrow at eleven.", "Please bring your old reports."] },
+    ] },
+};
 const ICONS = {
   danger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>',
   safe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',
   caution: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg>',
 };
-const LABEL = { digital_arrest: "डिजिटल अरेस्ट फ्रॉड", kyc_bank: "KYC / बैंक फ्रॉड", courier: "कूरियर / कस्टम्स फ्रॉड",
-  fake_relative: "नकली रिश्तेदार फ्रॉड", lottery: "लॉटरी / इनाम फ्रॉड", none: "संदिग्ध कॉल" };
-const DEMOS = [
-  { key: "digital_arrest", icon: "👮", hi: "नकली CBI अफ़सर", en: "Digital arrest", lines: [
-    "Hello, main CBI headquarters Delhi se Inspector Sharma bol raha hoon.", "Aapke naam pe ek money laundering case darj hua hai.",
-    "Aapke against arrest warrant nikla hai. Abhi video call pe aaiye.", "Yeh baat kisi ko mat batana, family ko bhi nahi.",
-    "Verification ke liye apne paise safe account mein transfer kar dijiye."] },
-  { key: "kyc_bank", icon: "🏦", hi: "KYC / OTP कॉल", en: "Fake bank", lines: [
-    "Namaste, main SBI bank se bol raha hoon.", "Aapka KYC expire ho gaya hai, aaj raat account band ho jayega.",
-    "Abhi aapke phone pe ek OTP aayega, woh mujhe bata dijiye turant."] },
-  { key: "courier", icon: "📦", hi: "पार्सल में ड्रग्स", en: "Courier scam", lines: [
-    "Hello, FedEx courier se bol rahe hain.", "Aapke naam ka ek parcel Mumbai customs ne pakda hai.",
-    "Usme drugs aur fake passport mile hain.", "Case band karne ke liye abhi ke abhi fine bhejna hoga."] },
-  { key: "fake_relative", icon: "🚑", hi: "नकली रिश्तेदार", en: "Fake emergency", lines: [
-    "Papa, main bol raha hoon, pehchana?", "Yeh mera naya number hai, purana phone toot gaya.",
-    "Mera accident ho gaya hai, main hospital mein hoon.", "Jaldi se is UPI pe pachaas hazaar paise bhej do, mummy ko mat batana."] },
-  { key: "lottery", icon: "🎁", hi: "लॉटरी का इनाम", en: "Lottery scam", lines: [
-    "Badhai ho! Aapne KBC lucky draw mein pachees lakh jeete hain.", "Prize lene ke liye bas processing fee bharni hogi.",
-    "Paanch hazaar rupaye GST jama kar dijiye, aaj hi."] },
-  { key: "normal", icon: "🩺", hi: "डॉक्टर का रिमाइंडर", en: "Normal call", lines: [
-    "Namaste aunty, main Dr. Mehta ke clinic se bol rahi hoon.", "Kal subah gyarah baje aapka checkup hai.",
-    "Apni purani reports saath le aaiyega.", "Koi dikkat ho toh clinic pe call kar lijiye. Dhanyavaad."] },
-];
 
-let ws, stream, chunkTimer, audioCtx, pcm = [], listening = false, spoken = { caution: false, danger: false }, guardianOn = false;
+let lang = null, ws, stream, chunkTimer, audioCtx, pcm = [], listening = false, guardianOn = false;
+let spoken = { caution: false, danger: false };
+const T = () => LANGS[lang].t;
+const esc = s => String(s).replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
 
-// ---------- server connection
+function savedLang() { try { return localStorage.getItem("kavach-lang"); } catch (e) { return null; } }
+
+function setLang(code) {
+  lang = code;
+  try { localStorage.setItem("kavach-lang", code); } catch (e) {}  // remembered on this phone only
+  const L = LANGS[lang];
+  document.documentElement.lang = L.html;
+  document.title = `${L.t.brand} · Kavach`;
+  document.querySelectorAll("[data-t]").forEach(el => el.innerHTML = L.t[el.dataset.t]);
+  $("langName").textContent = L.name;
+  $("helpline").innerHTML = L.t.helpline;
+  $("alarmTitle").innerHTML = L.t.alarmTitle;
+  $("demos").innerHTML = L.demos.map((d, i) => `<button data-i="${i}">${d.icon} ${esc(d.name)}</button>`).join("");
+  showFamily();
+  if (listening) $("listen").click();  // a running session used the old language: stop it
+  setListening(false);
+  reset();
+}
+
+// ---------- language picker (first launch, and the 🌐 chip)
+$("langList").innerHTML = Object.entries(LANGS).map(([code, L]) =>
+  `<button data-code="${code}">${L.name} <small>${L.en}</small></button>`).join("");
+$("langList").onclick = e => {
+  const b = e.target.closest("button"); if (!b) return;
+  setLang(b.dataset.code); $("langPick").classList.remove("show");
+};
+$("langBtn").onclick = () => {
+  document.querySelectorAll("#langList button").forEach(b => b.classList.toggle("current", b.dataset.code === lang));
+  $("langPick").classList.add("show");
+};
+
+// ---------- server connection: the chosen language tells Prisma what to listen for and Timbre what to speak
 function connect() {
   return new Promise((res, rej) => {
-    ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws/listen");
+    ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws/listen?lang=" + lang);
     ws.binaryType = "arraybuffer";
     ws.onopen = res; ws.onerror = rej; ws.onmessage = e => render(JSON.parse(e.data));
   });
@@ -251,9 +398,8 @@ function setStatus(level, title, msg, risk) {
 }
 
 function renderCaptions(text) {
-  if (!text) { $("captions").innerHTML = '<span class="empty">यहाँ कॉल की बातें दिखेंगी</span>'; return; }
+  if (!text || !text.trim()) { $("captions").innerHTML = `<span class="empty">${T().captionsEmpty}</span>`; return; }
   const parts = text.split(/(?<=[।.?!])\s+/).filter(Boolean);
-  const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
   $("captions").innerHTML = parts.map((p, i) => i < parts.length - 2 ? `<span class="old">${esc(p)}</span>` : esc(p)).join(" ");
   $("captions").scrollTop = 1e6;
 }
@@ -264,25 +410,27 @@ function render(st) {
   showError(st.error);
   renderCaptions(st.transcript);
   const flags = st.reasons || [];
-  $("flags").innerHTML = flags.length ? flags.map(r => `<span>${r.replace(/</g, "&lt;")}</span>`).join("")
-                                      : '<span class="empty">अभी तक कोई नहीं</span>';
+  $("flags").innerHTML = flags.length ? flags.map(r => `<span>${esc(r)}</span>`).join("")
+                                      : `<span class="empty">${T().flagsEmpty}</span>`;
   if (st.level === "danger") {
-    setStatus("danger", "धोखा! कॉल काट दीजिए", st.warning_text, st.risk);
+    setStatus("danger", T().dangerTitle, st.warning_text, st.risk);
     showAlarm(st);
   } else if (st.level === "caution") {
-    setStatus("caution", "सावधान रहिए", st.warning_text, st.risk);
+    setStatus("caution", T().cautionTitle, st.warning_text, st.risk);
   } else {
-    setStatus("safe", listening || st.transcript ? "अभी तक सब ठीक है" : "तैयार हूँ",
-              listening ? "सुन रहा हूँ… कोई खतरा दिखा तो तुरंत बताऊँगा" : (st.transcript ? "इस कॉल में कोई खतरा नहीं मिला" : "कोई कॉल नहीं सुन रहा"), st.risk);
+    const heard = st.transcript && st.transcript.trim();
+    setStatus("safe", listening || heard ? T().safeTitle : T().ready,
+              listening ? T().safeListening : (heard ? T().safeDone : T().idle), st.risk);
   }
   if (st.level !== "safe" && !spoken[st.level] && !spoken.danger) { spoken[st.level] = true; speak(st.warning_audio, st.warning_text); }
-  if (st.fire_alert && guardianOn) toast("👨‍👩‍👧 परिवार को अलर्ट भेज दिया गया · family alerted");
+  if (st.fire_alert && guardianOn) toast(T().familyAlerted);
 }
 
 function showAlarm(st) {
-  $("alarmType").textContent = LABEL[st.scam_type] || LABEL.none;
+  const L = LANGS[lang];
+  $("alarmType").textContent = L.labels[st.scam_type] || L.labels.none;
   $("alarmSay").textContent = st.warning_text;
-  $("alarmWhy").innerHTML = (st.reasons || []).slice(0, 3).map(r => `<li>${r.replace(/</g, "&lt;")}</li>`).join("");
+  $("alarmWhy").innerHTML = (st.reasons || []).slice(0, 3).map(r => `<li>${esc(r)}</li>`).join("");
   if (!$("alarm").dataset.dismissed) $("alarm").classList.add("show");
 }
 $("alarmOk").onclick = () => { $("alarm").classList.remove("show"); $("alarm").dataset.dismissed = "1"; };
@@ -304,7 +452,7 @@ async function speak(url, text) {
       if (r.status === 200) { new Audio(URL.createObjectURL(await r.blob())).play(); return; }
     } catch (e) {}
   }
-  const u = new SpeechSynthesisUtterance(text); u.lang = "hi-IN"; u.rate = 0.9;
+  const u = new SpeechSynthesisUtterance(text); u.lang = lang; u.rate = 0.9;
   speechSynthesis.cancel(); speechSynthesis.speak(u);
 }
 
@@ -362,10 +510,9 @@ function setListening(on) {
   listening = on;
   keepAwake(on);
   $("hero").classList.toggle("listening", on);
-  $("btnBig").textContent = on ? "रोकें" : "सुनो";
-  $("btnSmall").textContent = on ? "Stop" : "Listen";
-  $("hint").innerHTML = on ? 'सुन रहा हूँ… फ़ोन को पास रखिए<span class="en">Listening — keep the phone close</span>'
-                           : 'कॉल को स्पीकर पर डालिए और "सुनो" दबाइए<span class="en">Put the call on speaker, then tap Listen</span>';
+  $("btnBig").textContent = on ? T().stop : T().listen;
+  $("listen").setAttribute("aria-label", on ? T().stop : T().listen);
+  $("hint").textContent = on ? T().hintListening : T().hintIdle;
   showLevel(0);
 }
 
@@ -380,20 +527,19 @@ $("listen").onclick = async () => {
   try {
     stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: true } });
     await connect();
-  } catch (e) { showError("माइक या सर्वर नहीं मिला · Microphone or server not available"); return; }
+  } catch (e) { showError(T().micError); return; }
   reset(); setListening(true); render({ transcript: "", risk: 0, level: "safe", reasons: [] }); startCapture();
 };
 
-// ---------- demo calls (typed lines through the same live pipeline)
-$("demos").innerHTML = DEMOS.map((d, i) => `<button data-i="${i}">${d.icon} ${d.hi}<small>${d.en}</small></button>`).join("");
+// ---------- demo calls (typed lines through the same live pipeline, in the chosen language)
 $("demos").onclick = async e => {
   const b = e.target.closest("button"); if (!b) return;
   if (listening) $("listen").click();
-  try { await connect(); } catch (err) { showError("सर्वर नहीं मिला · Server not reachable"); return; }
+  try { await connect(); } catch (err) { showError(T().serverError); return; }
   reset();
   document.querySelectorAll(".demos button").forEach(x => x.disabled = true);
   window.scrollTo({ top: 0, behavior: "smooth" });
-  for (const line of DEMOS[b.dataset.i].lines) {
+  for (const line of LANGS[lang].demos[b.dataset.i].lines) {
     ws.send(JSON.stringify({ text: line }));
     await new Promise(r => setTimeout(r, 2200));
   }
@@ -401,15 +547,18 @@ $("demos").onclick = async e => {
 };
 
 // ---------- family-alert status
-fetch("/health").then(r => r.json()).then(h => {
-  guardianOn = h.guardian;
-  $("family").classList.toggle("on", h.guardian);
-  $("family").querySelector("span").textContent = h.guardian ? "परिवार अलर्ट चालू" : "परिवार अलर्ट बंद";
-}).catch(() => {});
+function showFamily() {
+  $("family").classList.toggle("on", guardianOn);
+  $("familyText").textContent = guardianOn ? T().familyOn : T().familyOff;
+}
+fetch("/health").then(r => r.json()).then(h => { guardianOn = h.guardian; if (lang) showFamily(); }).catch(() => {});
 
 if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
 
-reset();
+// first launch: ask for the language; afterwards use the remembered one
+const remembered = savedLang();
+if (remembered && LANGS[remembered]) setLang(remembered);
+else { setLang("hi-IN"); $("langPick").classList.add("show"); }
 </script>
 </body>
 </html>

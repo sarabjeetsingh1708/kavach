@@ -22,9 +22,11 @@ def combine(rule_risk: int, evon_risk) -> int:
 
 
 class CallSession:
-    def __init__(self, use_evon: bool = True, send_alerts: bool = True):
+    def __init__(self, use_evon: bool = True, send_alerts: bool = True, language: str = None):
         self.use_evon = use_evon and bool(config.EVON_URL)
         self.send_alerts = send_alerts
+        # language chosen in the app: Prisma listens in it and warnings use it. None = detect from the transcript.
+        self.language = language if language in gnani_tts.SUPPORTED else None
         self.transcript = ""
         self.risk = 0
         self.scam_type = "none"
@@ -75,7 +77,7 @@ class CallSession:
 
     def state(self) -> dict:
         lvl = self.level()
-        lang = gnani_tts.detect_language(self.transcript)  # warn in the language the call is in
+        lang = self.language or gnani_tts.detect_language(self.transcript)  # chosen language, else the call's
         warning = gnani_tts.plain(gnani_tts.warning_for(lvl, self.scam_type, lang))
         return {
             "transcript": self.transcript,
@@ -116,4 +118,4 @@ class CallSession:
         return st
 
     async def add_audio(self, audio: bytes, final: bool = False) -> dict:
-        return await self.add_text(await gnani_stt.transcribe(audio), final=final)
+        return await self.add_text(await gnani_stt.transcribe(audio, self.language), final=final)

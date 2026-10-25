@@ -76,6 +76,31 @@ def test_warning_language_follows_the_call():
     assert "அழைப்பைத் துண்டியுங்கள்" in st["warning_text"] and "lang=ta-IN" in st["warning_audio"]
 
 
+def test_chosen_language_drives_warning(monkeypatch):
+    """The app's language picker: /ws/listen?lang=... sets the warning language for the whole session."""
+    from app import config
+    monkeypatch.setattr(config, "EVON_URL", "")  # rules only: deterministic
+    client = TestClient(app)
+    calls = {
+        "en-IN": (["Hello, I am calling from your bank's KYC team.", "Your account will be blocked tonight.",
+                   "Please tell me the OTP you just received."], "Please hang up"),
+        "bn-IN": (["আমি সি বি আই অফিসার বলছি।", "আপনার নামে মামলা হয়েছে।", "আপনাকে গ্রেফতার করা হবে।",
+                   "কাউকে বলবেন না, এখনই টাকা পাঠান।"], "কলটি কেটে দিন"),
+        "ta-IN": (["நான் பேங்க்ல இருந்து பேசுறேன்.", "உங்க கே ஒய் சி அப்டேட் ஆகல.", "உங்க அக்கவுண்ட் ப்ளாக் ஆயிடும்.",
+                   "உங்க போன்ல வந்த ஓ டி பி சொல்லுங்க."], "அழைப்பைத் துண்டியுங்கள்"),
+    }
+    for lang, (lines, expected) in calls.items():
+        with client.websocket_connect(f"/ws/listen?lang={lang}") as ws:
+            for line in lines:
+                ws.send_json({"text": line})
+                st = ws.receive_json()
+        assert st["level"] == "danger", lang
+        assert st["language"] == lang and expected in st["warning_text"] and f"lang={lang}" in st["warning_audio"]
+    with client.websocket_connect("/ws/listen?lang=xx") as ws:  # unknown language: ignored, detection decides
+        ws.send_json({"text": "Main CBI se bol raha hoon"})
+        assert ws.receive_json()["language"] == "hi-IN"
+
+
 def test_check_recording_requires_token(monkeypatch):
     from app import config
     client = TestClient(app)

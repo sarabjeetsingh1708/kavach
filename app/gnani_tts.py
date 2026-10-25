@@ -4,9 +4,9 @@ Written in native script on purpose: Timbre picks its voice profile from the scr
 ("Yeh call fraud lag rahi hai") came out flat and English-accented. <pauses> (timbre-v3.0 audio tag) gives
 each sentence room to land; tags are stripped for on-screen text.
 
-The warning is spoken in the caller's language, detected from the script Prisma writes the transcript in
-(Devanagari / Tamil / Bengali); anything else falls back to LANGUAGE. Tamil and Bengali lines were written for
-this project and should be checked by a native speaker."""
+The warning is spoken in the language chosen in the app; without a choice (Telegram, recordings) it is detected
+from the script Prisma writes the transcript in (Devanagari / Tamil / Bengali), else LANGUAGE. Tamil and Bengali
+lines were written for this project and should be checked by a native speaker."""
 import hashlib
 import re
 
@@ -42,7 +42,17 @@ WARNINGS = {
         "none": "সাবধান! এই কলটি প্রতারণা বলে মনে হচ্ছে। <pauses> কাউকে OTP বা টাকা দেবেন না। <pauses> কলটি কেটে দিন।",
         "caution": "সাবধান থাকুন। <pauses> কাউকে OTP বা টাকা দেবেন না।",
     },
+    "en-IN": {
+        "digital_arrest": "Careful! This call looks like a scam. <pauses> The police never ask for money over the phone. <pauses> Please hang up.",
+        "kyc_bank": "Careful! This call looks like a scam. <pauses> Your bank will never ask for an OTP or PIN on a call. <pauses> Please hang up.",
+        "courier": "Careful! This call looks like a scam. <pauses> Asking for money over a parcel is a trick. <pauses> Please hang up.",
+        "fake_relative": "Wait! Don't send any money yet. <pauses> First call your family member yourself and check.",
+        "lottery": "Careful! This call looks like a scam. <pauses> You never have to pay to receive a prize. <pauses> Please hang up.",
+        "none": "Careful! This call looks like a scam. <pauses> Don't share an OTP or send money to anyone. <pauses> Please hang up.",
+        "caution": "Be careful. <pauses> Don't share an OTP or send money to anyone.",
+    },
 }
+SUPPORTED = tuple(WARNINGS)  # languages the app offers: screen text, listening and warnings
 WARNINGS_HI = WARNINGS["hi-IN"]
 CAUTION_HI = WARNINGS_HI["caution"]
 
