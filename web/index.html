@@ -36,7 +36,7 @@
   /* long Tamil/Bengali chip labels wrap the chips onto their own row instead of squeezing the brand */
   header { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-bottom: 8px; }
   .brand { display: flex; align-items: center; gap: 10px; }
-  .brand svg { width: 40px; height: 40px; flex: none; }
+  .brand .logo { width: 44px; height: 44px; flex: none; }
   .brand b { display: block; font-size: 26px; font-weight: 800; line-height: 1.1; }
   .brand span { font-size: 13px; color: var(--muted); white-space: nowrap; }
   .tools { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 6px; margin-left: auto; }
@@ -136,7 +136,7 @@
   #langPick { position: fixed; inset: 0; z-index: 30; background: var(--bg); display: none; overflow-y: auto; }
   #langPick.show { display: block; }
   #langPick .inner { max-width: 440px; margin: 0 auto; padding: 40px 16px; }
-  #langPick svg { width: 56px; height: 56px; }
+  #langPick .logo { width: 88px; height: 88px; display: block; }
   #langPick h1 { font-size: 24px; font-weight: 800; margin: 14px 0 4px; line-height: 1.3; }
   #langPick p { color: var(--muted); margin-bottom: 22px; }
   #langPick button { display: flex; align-items: center; justify-content: space-between; width: 100%; padding: 18px 20px;
@@ -150,7 +150,7 @@
 <main>
   <header>
     <div class="brand">
-      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 6 8.5v10.2C6 27.6 12 34.6 20 37c8-2.4 14-9.4 14-18.3V8.5L20 3Z" fill="#2F5D50"/><path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <img class="logo" src="/icons/mark-256.png" alt="" width="44" height="44">
       <div><b data-t="brand"></b><span>Kavach · scam-call shield</span></div>
     </div>
     <div class="tools">
@@ -216,7 +216,7 @@
 
 <div id="langPick" role="dialog" aria-labelledby="langPickTitle">
   <div class="inner">
-    <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 6 8.5v10.2C6 27.6 12 34.6 20 37c8-2.4 14-9.4 14-18.3V8.5L20 3Z" fill="#2F5D50"/><path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <img class="logo" src="/icons/mark-256.png" alt="" width="88" height="88">
     <h1 id="langPickTitle">भाषा चुनें · மொழி · ভাষা · Language</h1>
     <p>Kavach will listen, speak and show everything in this language.</p>
     <div id="langList"></div>
