@@ -1,0 +1,415 @@
+<!doctype html>
+<html lang="hi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#2F5D50">
+<title>कवच · Kavach</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="icon" type="image/png" href="/icons/icon-192.png">
+<link rel="apple-touch-icon" href="/icons/apple-touch-icon.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="कवच">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Mukta:wght@400;500;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #FBF7F0; --card: #FFFFFF; --ink: #1F2A24; --muted: #6B7069; --line: #ECE4D6;
+    --safe: #1E7A4F; --safe-soft: #E4F2EA; --warn: #B86A00; --warn-soft: #FFF1DC;
+    --danger: #C62828; --danger-deep: #8E1414; --danger-soft: #FDE8E8; --accent: #E8833A; --mic: #2F5D50;
+    --shadow: 0 1px 2px rgba(31,42,36,.06), 0 8px 24px rgba(31,42,36,.08);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root { --bg: #121714; --card: #1B221E; --ink: #EEF2EE; --muted: #A2ABA4; --line: #2A332E;
+            --safe-soft: #17301F; --warn-soft: #33260F; --danger-soft: #3A1616; --danger: #E5484D; --mic: #3E7A69; --shadow: 0 8px 24px rgba(0,0,0,.35); }
+  }
+  * { box-sizing: border-box; margin: 0; }
+  html { -webkit-text-size-adjust: 100%; }
+  body { font-family: "Mukta", system-ui, "Noto Sans Devanagari", sans-serif; background: var(--bg); color: var(--ink);
+         line-height: 1.45; min-height: 100vh; }
+  main { max-width: 520px; margin: 0 auto; padding: 16px 16px 40px; }
+  .en { color: var(--muted); font-size: .82em; font-weight: 500; }
+
+  /* header */
+  header { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 8px; }
+  .brand { display: flex; align-items: center; gap: 10px; }
+  .brand svg { width: 40px; height: 40px; flex: none; }
+  .brand b { display: block; font-size: 26px; font-weight: 800; line-height: 1; }
+  .brand span { font-size: 13px; color: var(--muted); }
+  .chip { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
+          background: var(--card); border: 1px solid var(--line); font-size: 13px; font-weight: 500; white-space: nowrap; }
+  .chip i { width: 8px; height: 8px; border-radius: 50%; background: var(--muted); }
+  .chip.on i { background: var(--safe); box-shadow: 0 0 0 3px var(--safe-soft); }
+
+  /* listen button */
+  .hero { display: grid; place-items: center; padding: 28px 0 18px; }
+  .ring-wrap { position: relative; width: 220px; height: 220px; display: grid; place-items: center; }
+  .ring { position: absolute; inset: 0; border-radius: 50%; background: var(--mic); opacity: 0; transform: scale(1);
+          transition: transform .12s ease-out, opacity .3s; }
+  .listening .ring { opacity: .14; }
+  .listening .ring.r2 { opacity: .08; }
+  #listen { position: relative; width: 180px; height: 180px; border-radius: 50%; border: 0; cursor: pointer;
+            background: var(--mic); color: #fff; font: inherit; display: grid; place-items: center; align-content: center;
+            gap: 2px; box-shadow: 0 10px 30px rgba(47,93,80,.35); transition: transform .15s, background .3s; }
+  #listen:active { transform: scale(.97); }
+  #listen svg { width: 46px; height: 46px; }
+  #listen .big { font-size: 34px; font-weight: 800; line-height: 1.1; }
+  #listen .small { font-size: 13px; opacity: .85; }
+  .listening #listen { background: #24493F; }
+  .hint { text-align: center; margin-top: 14px; font-size: 17px; }
+  .hint .en { display: block; }
+
+  /* status */
+  .status { display: flex; gap: 14px; align-items: flex-start; padding: 16px; border-radius: 18px; background: var(--card);
+            box-shadow: var(--shadow); border: 2px solid transparent; transition: background .3s, border-color .3s; }
+  .status .icon { width: 48px; height: 48px; border-radius: 14px; flex: none; display: grid; place-items: center;
+                  background: var(--safe-soft); color: var(--safe); }
+  .status .icon svg { width: 28px; height: 28px; }
+  .status h2 { font-size: 22px; font-weight: 800; line-height: 1.2; }
+  .status p { font-size: 17px; margin-top: 2px; }
+  .meter { height: 8px; border-radius: 4px; background: var(--line); margin-top: 10px; overflow: hidden; }
+  .meter div { height: 100%; width: 0; background: var(--safe); border-radius: 4px; transition: width .5s, background .3s; }
+  .status.caution { background: var(--warn-soft); border-color: var(--warn); }
+  .status.caution .icon { background: var(--warn); color: #fff; }
+  .status.caution .meter div { background: var(--warn); }
+  .status.danger { background: var(--danger-soft); border-color: var(--danger); }
+  .status.danger .icon { background: var(--danger); color: #fff; }
+  .status.danger h2 { color: var(--danger); }
+  .status.danger .meter div { background: var(--danger); }
+
+  /* cards */
+  .card { background: var(--card); border-radius: 18px; padding: 16px; margin-top: 14px; box-shadow: var(--shadow); }
+  .card h3 { font-size: 15px; font-weight: 700; color: var(--muted); margin-bottom: 8px; }
+  #captions { font-size: 19px; min-height: 56px; max-height: 190px; overflow-y: auto; }
+  #captions .old { color: var(--muted); }
+  #captions .empty { color: var(--muted); font-size: 16px; }
+  #flags { display: flex; flex-wrap: wrap; gap: 8px; }
+  #flags span { padding: 6px 12px; border-radius: 999px; background: var(--warn-soft); color: var(--ink); font-size: 14px;
+                border: 1px solid var(--line); }
+  #flags .empty { background: none; border: 0; padding: 0; color: var(--muted); font-size: 16px; }
+
+  /* demo drawer */
+  details.card summary { cursor: pointer; font-weight: 700; font-size: 17px; list-style: none; display: flex;
+                         justify-content: space-between; align-items: center; }
+  details.card summary::-webkit-details-marker { display: none; }
+  details.card summary::after { content: "+"; font-size: 24px; color: var(--muted); }
+  details[open].card summary::after { content: "–"; }
+  .demos { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 12px; }
+  .demos button { text-align: left; padding: 12px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg);
+                  color: var(--ink); font: inherit; font-size: 15px; font-weight: 600; cursor: pointer; line-height: 1.25; }
+  .demos button small { display: block; color: var(--muted); font-weight: 500; font-size: 12px; margin-top: 2px; }
+  .demos button:disabled { opacity: .5; cursor: wait; }
+
+  /* helpline + footer */
+  .helpline { display: flex; align-items: center; justify-content: center; gap: 10px; margin-top: 14px; padding: 14px;
+              border-radius: 18px; background: var(--card); border: 2px solid var(--line); color: var(--ink);
+              text-decoration: none; font-size: 18px; font-weight: 700; }
+  .helpline b { color: var(--danger); font-size: 22px; }
+  footer { margin-top: 18px; font-size: 13px; color: var(--muted); text-align: center; }
+  #err { margin-top: 10px; padding: 10px 14px; border-radius: 12px; background: var(--warn-soft); font-size: 14px; display: none; }
+
+  /* danger takeover */
+  #alarm { position: fixed; inset: 0; z-index: 10; background: var(--danger); color: #fff; display: none;
+           flex-direction: column; justify-content: center; padding: 24px; padding-bottom: max(24px, env(safe-area-inset-bottom));
+           animation: flash 1.2s ease-in-out infinite alternate; overflow-y: auto; }
+  #alarm.show { display: flex; }
+  @keyframes flash { to { background: var(--danger-deep); } }
+  @media (prefers-reduced-motion: reduce) { #alarm { animation: none; } .ring { transition: none; } }
+  #alarm .inner { max-width: 520px; margin: 0 auto; width: 100%; }
+  #alarm svg { width: 64px; height: 64px; }
+  #alarm h1 { font-size: 48px; font-weight: 800; line-height: 1.05; margin-top: 8px; }
+  #alarm .type { font-size: 20px; font-weight: 700; opacity: .9; margin-top: 4px; }
+  #alarm .say { font-size: 26px; font-weight: 700; line-height: 1.3; margin: 18px 0; }
+  #alarm ul { padding-left: 20px; font-size: 15px; opacity: .9; }
+  #alarm .actions { display: grid; gap: 10px; margin-top: 22px; }
+  #alarm a, #alarm button { display: block; text-align: center; padding: 16px; border-radius: 16px; font: inherit;
+                            font-size: 20px; font-weight: 800; text-decoration: none; cursor: pointer; }
+  #alarm a { background: #fff; color: var(--danger-deep); }
+  #alarm button { background: transparent; color: #fff; border: 2px solid rgba(255,255,255,.7); }
+  #toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%); z-index: 20; background: var(--ink);
+           color: var(--bg); padding: 10px 16px; border-radius: 12px; font-size: 15px; display: none; max-width: 90vw; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="brand">
+      <svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 3 6 8.5v10.2C6 27.6 12 34.6 20 37c8-2.4 14-9.4 14-18.3V8.5L20 3Z" fill="#2F5D50"/><path d="m13.5 20 4.5 4.5 8.5-9" fill="none" stroke="#fff" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><b>कवच</b><span>Kavach · scam-call shield</span></div>
+    </div>
+    <div class="chip" id="family"><i></i><span>परिवार अलर्ट…</span></div>
+  </header>
+
+  <section class="hero" id="hero">
+    <div class="ring-wrap">
+      <div class="ring r2" id="ring2"></div>
+      <div class="ring" id="ring1"></div>
+      <button id="listen" aria-label="सुनो — start listening">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>
+        <span class="big" id="btnBig">सुनो</span>
+        <span class="small" id="btnSmall">Listen</span>
+      </button>
+    </div>
+    <p class="hint" id="hint">कॉल को स्पीकर पर डालिए और "सुनो" दबाइए<span class="en">Put the call on speaker, then tap Listen</span></p>
+  </section>
+
+  <section class="status" id="status" aria-live="polite">
+    <div class="icon" id="statusIcon"></div>
+    <div style="flex:1">
+      <h2 id="statusTitle">तैयार हूँ</h2>
+      <p id="statusMsg">कोई कॉल नहीं सुन रहा</p>
+      <div class="meter"><div id="bar"></div></div>
+    </div>
+  </section>
+  <div id="err"></div>
+
+  <section class="card">
+    <h3>क्या बोला जा रहा है <span class="en">· live captions</span></h3>
+    <div id="captions"><span class="empty">यहाँ कॉल की बातें दिखेंगी</span></div>
+  </section>
+
+  <section class="card">
+    <h3>खतरे के संकेत <span class="en">· red flags</span></h3>
+    <div id="flags"><span class="empty">अभी तक कोई नहीं</span></div>
+  </section>
+
+  <details class="card" id="demoBox">
+    <summary><span>डेमो कॉल सुनिए <span class="en">· try a demo call</span></span></summary>
+    <div class="demos" id="demos"></div>
+  </details>
+
+  <a class="helpline" href="tel:1930">📞 धोखा हुआ? <b>1930</b> पर शिकायत करें</a>
+  <footer>Kavach is an aid, not a guarantee. Audio is processed only while listening and is never stored.<br>
+    Built on Gnani AI · Prisma · Evon · Timbre</footer>
+</main>
+
+<div id="alarm" role="alertdialog" aria-labelledby="alarmTitle">
+  <div class="inner">
+    <svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>
+    <h1 id="alarmTitle">धोखा!<br>कॉल काट दीजिए</h1>
+    <div class="type" id="alarmType"></div>
+    <p class="say" id="alarmSay"></p>
+    <ul id="alarmWhy"></ul>
+    <div class="actions">
+      <a href="tel:1930">📞 1930 पर शिकायत करें</a>
+      <button id="alarmOk">ठीक है, समझ गया</button>
+    </div>
+  </div>
+</div>
+<div id="toast"></div>
+
+<script>
+const $ = id => document.getElementById(id);
+const ICONS = {
+  danger: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M10.3 3.9 1.8 18a2 2 0 0 0 1.7 3h17a2 2 0 0 0 1.7-3L13.7 3.9a2 2 0 0 0-3.4 0Z"/><path d="M12 9v4M12 17h.01"/></svg>',
+  safe: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2 4 5v6c0 5 3.4 9.3 8 11 4.6-1.7 8-6 8-11V5l-8-3Z"/><path d="m8.5 12 2.5 2.5 4.5-5"/></svg>',
+  caution: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"><circle cx="12" cy="12" r="10"/><path d="M12 7v6M12 17h.01"/></svg>',
+};
+const LABEL = { digital_arrest: "डिजिटल अरेस्ट फ्रॉड", kyc_bank: "KYC / बैंक फ्रॉड", courier: "कूरियर / कस्टम्स फ्रॉड",
+  fake_relative: "नकली रिश्तेदार फ्रॉड", lottery: "लॉटरी / इनाम फ्रॉड", none: "संदिग्ध कॉल" };
+const DEMOS = [
+  { key: "digital_arrest", icon: "👮", hi: "नकली CBI अफ़सर", en: "Digital arrest", lines: [
+    "Hello, main CBI headquarters Delhi se Inspector Sharma bol raha hoon.", "Aapke naam pe ek money laundering case darj hua hai.",
+    "Aapke against arrest warrant nikla hai. Abhi video call pe aaiye.", "Yeh baat kisi ko mat batana, family ko bhi nahi.",
+    "Verification ke liye apne paise safe account mein transfer kar dijiye."] },
+  { key: "kyc_bank", icon: "🏦", hi: "KYC / OTP कॉल", en: "Fake bank", lines: [
+    "Namaste, main SBI bank se bol raha hoon.", "Aapka KYC expire ho gaya hai, aaj raat account band ho jayega.",
+    "Abhi aapke phone pe ek OTP aayega, woh mujhe bata dijiye turant."] },
+  { key: "courier", icon: "📦", hi: "पार्सल में ड्रग्स", en: "Courier scam", lines: [
+    "Hello, FedEx courier se bol rahe hain.", "Aapke naam ka ek parcel Mumbai customs ne pakda hai.",
+    "Usme drugs aur fake passport mile hain.", "Case band karne ke liye abhi ke abhi fine bhejna hoga."] },
+  { key: "fake_relative", icon: "🚑", hi: "नकली रिश्तेदार", en: "Fake emergency", lines: [
+    "Papa, main bol raha hoon, pehchana?", "Yeh mera naya number hai, purana phone toot gaya.",
+    "Mera accident ho gaya hai, main hospital mein hoon.", "Jaldi se is UPI pe pachaas hazaar paise bhej do, mummy ko mat batana."] },
+  { key: "lottery", icon: "🎁", hi: "लॉटरी का इनाम", en: "Lottery scam", lines: [
+    "Badhai ho! Aapne KBC lucky draw mein pachees lakh jeete hain.", "Prize lene ke liye bas processing fee bharni hogi.",
+    "Paanch hazaar rupaye GST jama kar dijiye, aaj hi."] },
+  { key: "normal", icon: "🩺", hi: "डॉक्टर का रिमाइंडर", en: "Normal call", lines: [
+    "Namaste aunty, main Dr. Mehta ke clinic se bol rahi hoon.", "Kal subah gyarah baje aapka checkup hai.",
+    "Apni purani reports saath le aaiyega.", "Koi dikkat ho toh clinic pe call kar lijiye. Dhanyavaad."] },
+];
+
+let ws, stream, chunkTimer, audioCtx, pcm = [], listening = false, spoken = { caution: false, danger: false }, guardianOn = false;
+
+// ---------- server connection
+function connect() {
+  return new Promise((res, rej) => {
+    ws = new WebSocket((location.protocol === "https:" ? "wss://" : "ws://") + location.host + "/ws/listen");
+    ws.binaryType = "arraybuffer";
+    ws.onopen = res; ws.onerror = rej; ws.onmessage = e => render(JSON.parse(e.data));
+  });
+}
+
+// ---------- rendering
+function setStatus(level, title, msg, risk) {
+  $("status").className = "status " + level;
+  $("statusIcon").innerHTML = ICONS[level] || ICONS.caution;
+  $("statusTitle").textContent = title; $("statusMsg").textContent = msg;
+  $("bar").style.width = (risk || 0) + "%";
+}
+
+function renderCaptions(text) {
+  if (!text) { $("captions").innerHTML = '<span class="empty">यहाँ कॉल की बातें दिखेंगी</span>'; return; }
+  const parts = text.split(/(?<=[।.?!])\s+/).filter(Boolean);
+  const esc = s => s.replace(/[&<>]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;" }[c]));
+  $("captions").innerHTML = parts.map((p, i) => i < parts.length - 2 ? `<span class="old">${esc(p)}</span>` : esc(p)).join(" ");
+  $("captions").scrollTop = 1e6;
+}
+
+let last = { transcript: "", risk: 0, level: "safe", reasons: [] };
+function render(st) {
+  last = st;
+  showError(st.error);
+  renderCaptions(st.transcript);
+  const flags = st.reasons || [];
+  $("flags").innerHTML = flags.length ? flags.map(r => `<span>${r.replace(/</g, "&lt;")}</span>`).join("")
+                                      : '<span class="empty">अभी तक कोई नहीं</span>';
+  if (st.level === "danger") {
+    setStatus("danger", "धोखा! कॉल काट दीजिए", st.warning_text, st.risk);
+    showAlarm(st);
+  } else if (st.level === "caution") {
+    setStatus("caution", "सावधान रहिए", st.warning_text, st.risk);
+  } else {
+    setStatus("safe", listening || st.transcript ? "अभी तक सब ठीक है" : "तैयार हूँ",
+              listening ? "सुन रहा हूँ… कोई खतरा दिखा तो तुरंत बताऊँगा" : (st.transcript ? "इस कॉल में कोई खतरा नहीं मिला" : "कोई कॉल नहीं सुन रहा"), st.risk);
+  }
+  if (st.level !== "safe" && !spoken[st.level] && !spoken.danger) { spoken[st.level] = true; speak(st.warning_audio, st.warning_text); }
+  if (st.fire_alert && guardianOn) toast("👨‍👩‍👧 परिवार को अलर्ट भेज दिया गया · family alerted");
+}
+
+function showAlarm(st) {
+  $("alarmType").textContent = LABEL[st.scam_type] || LABEL.none;
+  $("alarmSay").textContent = st.warning_text;
+  $("alarmWhy").innerHTML = (st.reasons || []).slice(0, 3).map(r => `<li>${r.replace(/</g, "&lt;")}</li>`).join("");
+  if (!$("alarm").dataset.dismissed) $("alarm").classList.add("show");
+}
+$("alarmOk").onclick = () => { $("alarm").classList.remove("show"); $("alarm").dataset.dismissed = "1"; };
+
+function showError(msg) { $("err").style.display = msg ? "block" : "none"; $("err").textContent = msg ? "⚠ " + msg : ""; }
+function toast(msg) { $("toast").textContent = msg; $("toast").style.display = "block"; setTimeout(() => $("toast").style.display = "none", 4000); }
+
+function reset() {
+  spoken = { caution: false, danger: false };
+  delete $("alarm").dataset.dismissed; $("alarm").classList.remove("show");
+  render({ transcript: "", risk: 0, level: "safe", reasons: [] });
+}
+
+// ---------- voice: Timbre clip from the server, browser voice only as a fallback
+async function speak(url, text) {
+  if (url) {
+    try {
+      const r = await fetch(url);
+      if (r.status === 200) { new Audio(URL.createObjectURL(await r.blob())).play(); return; }
+    } catch (e) {}
+  }
+  const u = new SpeechSynthesisUtterance(text); u.lang = "hi-IN"; u.rate = 0.9;
+  speechSynthesis.cancel(); speechSynthesis.speak(u);
+}
+
+// ---------- mic: raw PCM -> 16 kHz mono WAV every 4 s (Prisma accepts WAV directly)
+const TARGET_SR = 16000, CHUNK_S = 4;
+function toWav(samples, sr) {
+  const buf = new ArrayBuffer(44 + samples.length * 2), v = new DataView(buf);
+  const str = (o, s) => [...s].forEach((c, i) => v.setUint8(o + i, c.charCodeAt(0)));
+  str(0, "RIFF"); v.setUint32(4, 36 + samples.length * 2, true); str(8, "WAVEfmt ");
+  v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+  v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+  str(36, "data"); v.setUint32(40, samples.length * 2, true);
+  samples.forEach((s, i) => v.setInt16(44 + i * 2, Math.max(-1, Math.min(1, s)) * 0x7fff, true));
+  return buf;
+}
+
+function startCapture() {
+  audioCtx = new AudioContext();
+  const src = audioCtx.createMediaStreamSource(stream);
+  const proc = audioCtx.createScriptProcessor(4096, 1, 1);
+  const ratio = audioCtx.sampleRate / TARGET_SR;
+  proc.onaudioprocess = e => {
+    const x = e.inputBuffer.getChannelData(0);
+    let sum = 0;
+    for (let i = 0; i < x.length; i++) sum += x[i] * x[i];
+    showLevel(Math.sqrt(sum / x.length));
+    for (let i = 0; i < x.length / ratio; i++) pcm.push(x[Math.floor(i * ratio)]);
+  };
+  src.connect(proc); proc.connect(audioCtx.destination);
+  chunkTimer = setInterval(() => {
+    if (pcm.length && ws.readyState === 1) ws.send(toWav(pcm, TARGET_SR));
+    pcm = [];
+  }, CHUNK_S * 1000);
+}
+
+function showLevel(rms) {  // rings breathe with the voice so the parent can see it is hearing the call
+  const l = Math.min(1, rms * 8);
+  $("ring1").style.transform = `scale(${1 + l * 0.18})`;
+  $("ring2").style.transform = `scale(${1 + l * 0.32})`;
+}
+
+// Keep the screen on while listening, so the spare phone doesn't sleep mid-call.
+let wakeLock = null;
+async function keepAwake(on) {
+  try {
+    if (on && "wakeLock" in navigator) wakeLock = await navigator.wakeLock.request("screen");
+    else if (!on && wakeLock) { await wakeLock.release(); wakeLock = null; }
+  } catch (e) {}  // denied or unsupported: the page still works
+}
+document.addEventListener("visibilitychange", () => {  // the lock is dropped when the page is hidden; take it back
+  if (listening && document.visibilityState === "visible") keepAwake(true);
+});
+
+function setListening(on) {
+  listening = on;
+  keepAwake(on);
+  $("hero").classList.toggle("listening", on);
+  $("btnBig").textContent = on ? "रोकें" : "सुनो";
+  $("btnSmall").textContent = on ? "Stop" : "Listen";
+  $("hint").innerHTML = on ? 'सुन रहा हूँ… फ़ोन को पास रखिए<span class="en">Listening — keep the phone close</span>'
+                           : 'कॉल को स्पीकर पर डालिए और "सुनो" दबाइए<span class="en">Put the call on speaker, then tap Listen</span>';
+  showLevel(0);
+}
+
+$("listen").onclick = async () => {
+  if (listening) {
+    clearInterval(chunkTimer); pcm = [];
+    if (audioCtx) audioCtx.close();
+    stream.getTracks().forEach(t => t.stop()); ws.close();
+    setListening(false); render({ ...last, fire_alert: false });  // keep what was heard on screen
+    return;
+  }
+  try {
+    stream = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: false, noiseSuppression: true } });
+    await connect();
+  } catch (e) { showError("माइक या सर्वर नहीं मिला · Microphone or server not available"); return; }
+  reset(); setListening(true); render({ transcript: "", risk: 0, level: "safe", reasons: [] }); startCapture();
+};
+
+// ---------- demo calls (typed lines through the same live pipeline)
+$("demos").innerHTML = DEMOS.map((d, i) => `<button data-i="${i}">${d.icon} ${d.hi}<small>${d.en}</small></button>`).join("");
+$("demos").onclick = async e => {
+  const b = e.target.closest("button"); if (!b) return;
+  if (listening) $("listen").click();
+  try { await connect(); } catch (err) { showError("सर्वर नहीं मिला · Server not reachable"); return; }
+  reset();
+  document.querySelectorAll(".demos button").forEach(x => x.disabled = true);
+  window.scrollTo({ top: 0, behavior: "smooth" });
+  for (const line of DEMOS[b.dataset.i].lines) {
+    ws.send(JSON.stringify({ text: line }));
+    await new Promise(r => setTimeout(r, 2200));
+  }
+  document.querySelectorAll(".demos button").forEach(x => x.disabled = false);
+};
+
+// ---------- family-alert status
+fetch("/health").then(r => r.json()).then(h => {
+  guardianOn = h.guardian;
+  $("family").classList.toggle("on", h.guardian);
+  $("family").querySelector("span").textContent = h.guardian ? "परिवार अलर्ट चालू" : "परिवार अलर्ट बंद";
+}).catch(() => {});
+
+if ("serviceWorker" in navigator) navigator.serviceWorker.register("/sw.js").catch(() => {});
+
+reset();
+</script>
+</body>
+</html>
