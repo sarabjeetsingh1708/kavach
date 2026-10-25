@@ -56,6 +56,8 @@ telephony number such as Exotel or Twilio. That's left as future work.
 
 ## Run it
 
+**Step-by-step guide, with phone install and troubleshooting: [docs/how-to-start.md](docs/how-to-start.md).** The short version:
+
 ```bash
 cd kavach
 python -m venv .venv
