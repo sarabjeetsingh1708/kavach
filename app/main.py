@@ -131,7 +131,7 @@ async def ws_listen(ws: WebSocket):
 
 @app.get("/")
 async def index():
-    return FileResponse(WEB / "index.html")
+    return FileResponse(WEB / "index.html", headers={"Cache-Control": "no-cache"})
 
 
 @app.get("/voices")
@@ -144,9 +144,12 @@ app.mount("/voices", StaticFiles(directory=WEB / "voices", check_dir=False), nam
 app.mount("/icons", StaticFiles(directory=WEB / "icons", check_dir=False), name="icons")
 
 
+NO_CACHE = {"Cache-Control": "no-cache"}  # phones must re-check these, or an installed app keeps its old icon/shell
+
+
 @app.get("/manifest.webmanifest")
 async def manifest():
-    return FileResponse(WEB / "manifest.webmanifest", media_type="application/manifest+json")
+    return FileResponse(WEB / "manifest.webmanifest", media_type="application/manifest+json", headers=NO_CACHE)
 
 
 @app.get("/sw.js")
