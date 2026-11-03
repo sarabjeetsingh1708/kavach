@@ -1,6 +1,8 @@
 # 🛡️ Kavach: AI Scam-Call Shield
 
-> "My mom almost fell for a digital-arrest call, so I built an AI that listens to the call and warns her in Hindi."
+📄 **One-page pitch:** [PITCH.md](PITCH.md) · 🎬 **Demo video:** https://www.youtube.com/watch?v=fZpOKIOwnpo
+
+> Scammers call our parents pretending to be the CBI or the police. So I built an AI that listens to the call and warns them, out loud, in their own language.
 
 Kavach listens to a suspicious phone call on speaker and warns an elderly parent **out loud, in their own language**, before they share an OTP or send money. It also sends their son or daughter a Telegram alert with the scam type, risk score and reasons.
 
@@ -70,7 +72,7 @@ uvicorn app.main:app --reload
 Open http://localhost:8000.
 
 - **No keys yet?** Use the **Demo** box on the page. It streams a scripted call line by line through the real WebSocket and scoring pipeline, so you can see the red screen, the reasons and hear the warning (browser voice).
-- **Live mic (Mode A)** needs `GNANI_API_KEY`. Phone browsers need HTTPS for the mic: use a Cloudflare Tunnel (`cloudflared tunnel --url http://localhost:8000`).
+- **Live mic (Mode A)** needs `GNANI_API_KEY`. Phone browsers need HTTPS for the mic: use a Cloudflare Tunnel (`cloudflared tunnel --url http://127.0.0.1:8000`). Use `127.0.0.1`, not `localhost`, which can resolve to IPv6 and fail with "connection refused".
 - **Install as an app:** open the tunnel address on the spare phone in Chrome, then use the menu → **Add to Home screen / Install app**. It opens full-screen with the कवच icon, and keeps the screen on while listening.
 - **Auto-check recordings** needs `KAVACH_UPLOAD_TOKEN` in `.env` (any long random string) and the phone setup in [docs/auto-check-recordings.md](docs/auto-check-recordings.md). Recordings in any format (M4A, AMR, MP3, OGG) are decoded with the free ffmpeg bundled by `imageio-ffmpeg`. Only the first 5 minutes are checked (`MAX_AUDIO_S`).
 - **Telegram** needs only `TELEGRAM_BOT_TOKEN` (from @BotFather). The bot starts inside the web server.
