@@ -40,4 +40,4 @@ A rules layer scores red-flag phrases (OTP, arrest threats, "tell no one") on ev
 - Code: https://github.com/sarabjeetsingh1708/kavach
 - Demo video: https://www.youtube.com/watch?v=fZpOKIOwnpo
 - X post: https://x.com/sarabjeet178/status/2114385309391810618
-- LinkedIn post: [PASTE LINK]
+
